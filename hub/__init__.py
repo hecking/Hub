@@ -6,18 +6,33 @@ If a copy of the MPL was not distributed with this file, You can obtain one at h
 
 import numpy as np
 
-
-from .collections import dataset
-from .collections.dataset.core import Transform
-from .collections import tensor
-from .collections.dataset import load as load_v0
-from .collections.client_manager import init
 import hub.config
-from hub.api.dataset import Dataset
-from hub.compute import transform
 from hub.log import logger
-import traceback
-from hub.exceptions import DaskModuleNotInstalledException, HubDatasetNotFoundException
+from hub import reservoir
+
+try:
+    from .collections import dataset
+    from .collections.dataset.core import Transform
+    from .collections import tensor
+    from .collections.dataset import load as load_v0
+    from .collections.client_manager import init
+    from hub.api.dataset import Dataset
+    from hub.compute import transform
+    import traceback
+    from hub.exceptions import (
+        DaskModuleNotInstalledException,
+        HubDatasetNotFoundException,
+    )
+except ImportError:
+    dataset = None
+    Transform = None
+    tensor = None
+    load_v0 = None
+    init = None
+    Dataset = None
+    transform = None
+    DaskModuleNotInstalledException = ImportError
+    HubDatasetNotFoundException = RuntimeError
 
 
 def local_mode():
